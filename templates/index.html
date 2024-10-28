@@ -1,9 +1,47 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <title>Video Streaming Demonstration</title>
-  </head>
-  <body>
-    <h1>Video Streaming Demonstration</h1>
-    <img src="{{ url_for('video_feed') }}">
-  </body>
+<head>
+    <title>IMX708 Camera Stream</title>
+    <style>
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            color: green;
+        }
+        .container {
+            text-align: center;
+            margin: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        function triggerAutofocus() {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = 'Focusing...';
+            
+            fetch('/trigger_autofocus')
+                .then(response => response.json())
+                .then(data => {
+                    statusDiv.textContent = data.message;
+                    setTimeout(() => {
+                        statusDiv.textContent = '';
+                    }, 2000);
+                });
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>IMX708 Camera Stream</h1>
+        <img src="{{ url_for('video_feed') }}" width="640" height="480"><br>
+        <button onclick="triggerAutofocus()">Trigger Autofocus</button>
+        <div id="status" class="status"></div>
+    </div>
+</body>
 </html>
+
